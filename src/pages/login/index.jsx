@@ -13,9 +13,9 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const onFinish = async (values) => {
-    const { fullName, email } = values;
+    const { username, password } = values;
     setIsSubmit(true);
-    const res = await callLogin(fullName, email);
+    const res = await callLogin(username, password);
     setIsSubmit(false);
     if (res?.data) {
       localStorage.setItem("access_token", res.data.access_token);
@@ -35,7 +35,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="register-page">
+    <div className="login-page">
       <main className="main">
         <div className="container">
           <section className="wrapper">
@@ -52,7 +52,7 @@ const LoginPage = () => {
               <Form.Item
                 labelCol={{ span: 24 }} //whole column
                 label="Email"
-                name="email"
+                name="username"
                 rules={[
                   { required: true, message: "Email không được để trống!" },
                 ]}
@@ -75,12 +75,12 @@ const LoginPage = () => {
               // wrapperCol={{ offset: 6, span: 16 }}
               >
                 <Button type="primary" htmlType="submit" loading={isSubmit}>
-                  Đăng Nhập
+                  Đăng nhập
                 </Button>
               </Form.Item>
               <Divider>Or</Divider>
               <p className="text text-normal">
-                Đã chưa có tài khoản ?
+                Chưa có tài khoản ?
                 <span>
                   <Link to="/register"> Đăng Ký </Link>
                 </span>

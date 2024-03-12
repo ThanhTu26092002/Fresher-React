@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginPage from "./pages/login/index.jsx";
 import { Outlet } from "react-router-dom";
@@ -35,15 +34,15 @@ const router = createBrowserRouter([
         path: "book",
         element: <BookPage />,
       },
-      {
-        path: "login",
-        element: <LoginPage />,
-      },
-      {
-        path: "register",
-        element: <RegisterPage />,
-      },
     ],
+  },
+  {
+    path: "login",
+    element: <LoginPage />,
+  },
+  {
+    path: "register",
+    element: <RegisterPage />,
   },
 ]);
 

@@ -7,6 +7,7 @@ import ContactPage from "./pages/contact/index.jsx";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
+import RegisterPage from "./pages/register/index.jsx";
 
 const Layout = () => {
   return (
@@ -34,11 +35,15 @@ const router = createBrowserRouter([
         path: "book",
         element: <BookPage />,
       },
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
     ],
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
   },
 ]);
 

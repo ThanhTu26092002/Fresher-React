@@ -9,8 +9,12 @@ import Home from "./components/Home";
 import RegisterPage from "./pages/register/index.jsx";
 import { useEffect } from "react";
 import { callFetchAccount } from "./services/api.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { doGetAccountAction } from "./redux/account/accountSlice.js";
+import Loading from "./components/loading/index.jsx";
+import NotFound from "./components/NotFound/index.jsx";
+import AdminPage from "./pages/admin/index.jsx";
+import ProtectedRoute from "./components/ProtectedRoute/index.jsx";
 
 const Layout = () => {
   return (
@@ -26,12 +30,36 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <div>404 not found</div>,
+    errorElement: <NotFound />,
 
     children: [
       { index: true, element: <Home /> },
       {
         path: "contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "book",
+        element: <BookPage />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <Layout />,
+    errorElement: <NotFound />,
+
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <AdminPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "user",
         element: <ContactPage />,
       },
       {
@@ -52,8 +80,10 @@ const router = createBrowserRouter([
 
 export default function App() {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
   const getAccount = async () => {
+    if (window.location.pathname === "/login") return;
     const res = await callFetchAccount();
     if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
@@ -65,7 +95,11 @@ export default function App() {
   }, []);
   return (
     <>
-      <RouterProvider router={router} />;
+      {isAuthenticated === true || window.location.pathname === "/login" ? (
+        <RouterProvider router={router} />
+      ) : (
+        <Loading />
+      )}
     </>
   );
 }

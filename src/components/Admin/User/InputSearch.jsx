@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Row, theme } from "antd";
 
-const AdvancedSearchForm = () => {
+const InputSearch = (props) => {
   const { token } = theme.useToken();
   const [form] = Form.useForm();
 
@@ -12,9 +12,21 @@ const AdvancedSearchForm = () => {
   };
 
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
+    let query = "";
 
+    if (values.fullName) {
+      query += `&fullName=${values.fullName}`;
+    }
+    if (values.email) {
+      query += `&email=${values.email}`;
+    }
+    if (values.phone) {
+      query += `&phone=${values.phone}`;
+    }
+    if (query) {
+      props.handleSearch(query);
+    }
+  };
   return (
     <Form
       form={form}
@@ -24,27 +36,19 @@ const AdvancedSearchForm = () => {
     >
       <Row gutter={24}>
         <Col span={8}>
-          <Form.Item
-            labelCol={{ span: 24 }} //whole column
-            name={`fullName`}
-            label={`Name`}
-          >
+          <Form.Item labelCol={{ span: 24 }} name={`fullName`} label={`Name`}>
             <Input placeholder="placeholder" />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item
-            labelCol={{ span: 24 }} //whole column
-            name={`email`}
-            label={`Email`}
-          >
+          <Form.Item labelCol={{ span: 24 }} label={`Email`}>
             <Input placeholder="placeholder" />
           </Form.Item>
         </Col>
 
         <Col span={8}>
           <Form.Item
-            labelCol={{ span: 24 }} //whole column
+            labelCol={{ span: 24 }}
             name={`phone`}
             label={`Số điện thoại`}
           >
@@ -65,27 +69,9 @@ const AdvancedSearchForm = () => {
           >
             Clear
           </Button>
-          {/* <a
-                        style={{ fontSize: 12 }}
-                        onClick={() => {
-                            setExpand(!expand);
-                        }}
-                    >
-                        {expand ? <UpOutlined /> : <DownOutlined />} Collapse
-                    </a> */}
         </Col>
       </Row>
     </Form>
-  );
-};
-
-// https://stackblitz.com/run?file=demo.tsx
-// https://ant.design/components/form
-const InputSearch = () => {
-  return (
-    <div>
-      <AdvancedSearchForm />
-    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import { Table, Row, Col } from "antd";
 import { useEffect, useState } from "react";
 import { callFetchListUser } from "../../../services/api";
 import InputSearch from "./InputSearch";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const UserTable = () => {
   const [listUser, setListUser] = useState([]);
@@ -11,16 +12,21 @@ const UserTable = () => {
   const [total, setTotal] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [sortQuery, setSortQuery] = useState("");
 
   useEffect(() => {
     fetchUser();
-  }, [current, pageSize]);
+  }, [current, pageSize, filter, sortQuery]);
 
   const fetchUser = async (searchFilter) => {
     setIsLoading(true);
     let query = `current=${current}&pageSize=${pageSize}`;
-    if (searchFilter) {
-      query += `&${searchFilter}`;
+    if (filter) {
+      query += `&${filter}`;
+    }
+    if (sortQuery) {
+      query += `&${sortQuery}`;
     }
     const res = await callFetchListUser(query);
     if (res && res.data) {
@@ -70,16 +76,22 @@ const UserTable = () => {
       setCurrent(1);
     }
 
-    console.log("params", pagination, filters, sorter, extra);
+    if (sorter && sorter.field) {
+      const q =
+        sorter.order === "ascend"
+          ? `sort=${sorter.field}`
+          : `sort=-${sorter.field}`;
+      setSortQuery(q);
+    }
   };
   const handleSearch = (query) => {
-    fetchUser(query);
+    setFilter(query);
   };
   return (
     <>
       <Row gutter={[20, 20]}>
         <Col span={24}>
-          <InputSearch handleSearch={handleSearch} />
+          <InputSearch handleSearch={handleSearch} setFilter={setFilter} />
         </Col>
         <Col span={24}>
           <Table

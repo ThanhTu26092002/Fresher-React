@@ -1,9 +1,15 @@
-import { Table, Row, Col } from "antd";
+import { Table, Row, Col, Button } from "antd";
 
 import { useEffect, useState } from "react";
 import { callFetchListUser } from "../../../services/api";
 import InputSearch from "./InputSearch";
-import { ReloadOutlined } from "@ant-design/icons";
+import {
+  CloudUploadOutlined,
+  ExportOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
+import UserModalCreate from "./UserModalCreate";
 
 const UserTable = () => {
   const [listUser, setListUser] = useState([]);
@@ -14,6 +20,7 @@ const UserTable = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("");
+  const [openModalCreate, setOpenModalCreate] = useState(false);
 
   useEffect(() => {
     fetchUser();
@@ -39,8 +46,21 @@ const UserTable = () => {
     {
       title: "Id",
       dataIndex: "_id",
-      sorter: true,
+      render: (text, record, index) => {
+        return (
+          <a
+            href="#"
+            onClick={() => {
+              // setDataViewDetail(record);
+              // setOpenViewDetail(true);
+            }}
+          >
+            {record._id}
+          </a>
+        );
+      },
     },
+
     {
       title: "Tên hiển thị",
       dataIndex: "fullName",
@@ -84,6 +104,51 @@ const UserTable = () => {
       setSortQuery(q);
     }
   };
+  // const handleDeleteUser = async (userId) => {
+  //   const res = await callDeleteUser(userId);
+  //   if (res && res.data) {
+  //     message.success("xóa user thành công");
+  //   } else {
+  //     notification.error({
+  //       message: "Có lỗi xảy ra",
+  //       description: res.message,
+  //     });
+  //   }
+  // };
+  const renderHeader = () => {
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <span>Table List User</span>
+        <span style={{ display: "flex", gap: 15 }}>
+          <Button icon={<ExportOutlined />} type="primary">
+            Export
+          </Button>
+          <Button icon={<CloudUploadOutlined />} type="primary">
+            Import
+          </Button>
+          <Button
+            icon={<PlusOutlined />}
+            type="primary"
+            onClick={() => {
+              setOpenModalCreate(true);
+            }}
+          >
+            Thêm mới
+          </Button>
+          <Button
+            type="ghost"
+            onClick={() => {
+              setFilter("");
+              setSortQuery("");
+            }}
+          >
+            <ReloadOutlined />
+          </Button>
+        </span>
+      </div>
+    );
+  };
+
   const handleSearch = (query) => {
     setFilter(query);
   };
@@ -95,6 +160,7 @@ const UserTable = () => {
         </Col>
         <Col span={24}>
           <Table
+            title={renderHeader}
             loading={isLoading}
             columns={columns}
             dataSource={listUser}
@@ -109,6 +175,10 @@ const UserTable = () => {
           />
         </Col>
       </Row>
+      <UserModalCreate
+        openModalCreate={openModalCreate}
+        setOpenModalCreate={setOpenModalCreate}
+      />
     </>
   );
 };

@@ -9,6 +9,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   DownOutlined,
+  LeftCircleTwoTone,
 } from "@ant-design/icons";
 import { Layout, Menu, Dropdown, Space, message } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -52,6 +53,11 @@ const items = [
     label: <Link to="/admin/order">Manage Orders</Link>,
     key: "order",
     icon: <DollarCircleOutlined />,
+  },
+  {
+    label: <Link to="/">Back Home</Link>,
+    key: "admin",
+    icon: <LeftCircleTwoTone />,
   },
 ];
 

@@ -15,7 +15,7 @@ const UserModalCreate = (props) => {
     if (res && res.data) {
       message.resetFields();
       setOpenModalCreate(false);
-      await props.fetchUser();
+      if (fetchUser) await fetchUser();
     } else {
       notification.error({
         message: "đã có lỗi xảy ra",
@@ -58,7 +58,7 @@ const UserModalCreate = (props) => {
             name="password"
             rules={[{ required: true, message: "vui lòng nhập mật khẩu" }]}
           >
-            <Input.password />
+            <Input.Password />
           </Form.Item>
           <Form.Item
             confirmLoading={{ span: 24 }}

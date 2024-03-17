@@ -26,5 +26,5 @@ export const callFetchListUser = (query) => {
 };
 
 export const callCreateAUser = (query) => {
-  return axios.get(`/api/v1/user${query}`);
+  return axios.post(`/api/v1/user${query}`);
 };

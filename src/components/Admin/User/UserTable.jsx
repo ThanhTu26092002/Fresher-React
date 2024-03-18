@@ -1,16 +1,30 @@
-import { Table, Row, Col, Button } from "antd";
+import {
+  Table,
+  Row,
+  Col,
+  Button,
+  Popconfirm,
+  message,
+  notification,
+} from "antd";
 
 import { useEffect, useState } from "react";
-import { callFetchListUser } from "../../../services/api";
+import { callDeleteUser, callFetchListUser } from "../../../services/api";
 import InputSearch from "./InputSearch";
 import UserImport from "./data/UserImport";
+import UserModalUpdate from "./UserModalUpdate";
+import UserModalCreate from "./UserModalCreate";
+
+import * as XLSX from "xlsx";
 import {
   CloudUploadOutlined,
+  DeleteOutlined,
+  DeleteTwoTone,
+  EditTwoTone,
   ExportOutlined,
   PlusOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import UserModalCreate from "./UserModalCreate";
 
 const UserTable = () => {
   const [listUser, setListUser] = useState([]);
@@ -23,6 +37,7 @@ const UserTable = () => {
   const [sortQuery, setSortQuery] = useState("");
   const [openModalCreate, setOpenModalCreate] = useState(false);
   const [openModalImport, setOpenModalImport] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
 
   useEffect(() => {
     fetchUser();
@@ -79,11 +94,36 @@ const UserTable = () => {
       sorter: true,
     },
     {
+      title: "Ngày cập nhật",
+      dataIndex: "date",
+      sorter: true,
+    },
+    {
       title: "Action",
       render: (text, record, index) => {
         return (
           <>
-            <button>Delete</button>
+            <Popconfirm
+              placement="leftTop"
+              title={"Xác nhận xóa User"}
+              description={"Bạn có chắc chắn muốn xóa user này không?"}
+              onConfirm={() => hanleDeleteUser(record._id)}
+              okText="xác nhận"
+              cancelText="hủy"
+            >
+              <span style={{ cursor: "pointer", margin: "0 20px" }}>
+                <DeleteTwoTone twoToneColor="#ff4d4f" />
+              </span>
+            </Popconfirm>
+
+            <EditTwoTone
+              twoToneColor="#f57800"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setOpenModalUpdate(true);
+                setDataUpdate(record);
+              }}
+            />
           </>
         );
       },
@@ -106,23 +146,28 @@ const UserTable = () => {
       setSortQuery(q);
     }
   };
-  // const handleDeleteUser = async (userId) => {
-  //   const res = await callDeleteUser(userId);
-  //   if (res && res.data) {
-  //     message.success("xóa user thành công");
-  //   } else {
-  //     notification.error({
-  //       message: "Có lỗi xảy ra",
-  //       description: res.message,
-  //     });
-  //   }
-  // };
+  const hanleDeleteUser = async (userId) => {
+    const res = await callDeleteUser(userId);
+    if (res && res.data) {
+      message.success("xóa user thành công");
+      fetchUser();
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: res.message,
+      });
+    }
+  };
   const renderHeader = () => {
     return (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <span>Table List User</span>
         <span style={{ display: "flex", gap: 15 }}>
-          <Button icon={<ExportOutlined />} type="primary">
+          <Button
+            icon={<ExportOutlined />}
+            type="primary"
+            onClick={() => handleExportData()}
+          >
             Export
           </Button>
           <Button
@@ -160,6 +205,14 @@ const UserTable = () => {
   const handleSearch = (query) => {
     setFilter(query);
   };
+  const handleExportData = () => {
+    if (listUser.length > 0) {
+      const worksheet = XLSX.utils.json_to_sheet(listUser);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "sheet1");
+      XLSX.writeFile(workbook, "ExportUser.csv");
+    }
+  };
   return (
     <>
       <Row gutter={[20, 20]}>
@@ -190,6 +243,12 @@ const UserTable = () => {
       <UserImport
         openModalImport={openModalImport}
         setOpenModalImport={setOpenModalImport}
+      />
+      <UserModalUpdate
+        openModalUpdate={openModalUpdate}
+        setOpenModalUpdate={setOpenModalUpdate}
+        // dataUpdate={dataUpdate}
+        // setDataUpdate={setDataUpdate}
       />
     </>
   );

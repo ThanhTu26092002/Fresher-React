@@ -4,6 +4,7 @@ import { Upload } from "antd";
 import * as XLSX from "xlsx";
 import { useState } from "react";
 import { callBulkCreateUser } from "../../../../services/api";
+import templateFile from "./templateFile.xlsx?url";
 
 const { Dragger } = Upload;
 const UserImport = (props) => {
@@ -99,7 +100,15 @@ const UserImport = (props) => {
           </p>
           <p className="ant-upload-hint">
             Support for a single or bulk upload. Strictly prohibited from
-            uploading company data or other banned files.
+            uploading company data or other banned files. &nbsp;
+            <a
+              onClick={(e) => e.stopPropagation()}
+              href={templateFile}
+              download
+            >
+              {" "}
+              Dowload Sample File
+            </a>
           </p>
         </Dragger>
         <div style={{ paddingTop: 20 }}>

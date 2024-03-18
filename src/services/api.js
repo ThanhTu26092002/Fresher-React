@@ -25,6 +25,6 @@ export const callFetchListUser = (query) => {
   return axios.get(`/api/v1/user?${query}`);
 };
 
-export const callCreateAUser = (query) => {
-  return axios.post(`/api/v1/user${query}`);
+export const callCreateAUser = (userData) => {
+  return axios.post(`/api/v1/user`, userData);
 };

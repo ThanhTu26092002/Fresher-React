@@ -3,6 +3,7 @@ import { Table, Row, Col, Button } from "antd";
 import { useEffect, useState } from "react";
 import { callFetchListUser } from "../../../services/api";
 import InputSearch from "./InputSearch";
+import UserImport from "./data/UserImport";
 import {
   CloudUploadOutlined,
   ExportOutlined,
@@ -21,6 +22,7 @@ const UserTable = () => {
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("");
   const [openModalCreate, setOpenModalCreate] = useState(false);
+  const [openModalImport, setOpenModalImport] = useState(false);
 
   useEffect(() => {
     fetchUser();
@@ -123,7 +125,13 @@ const UserTable = () => {
           <Button icon={<ExportOutlined />} type="primary">
             Export
           </Button>
-          <Button icon={<CloudUploadOutlined />} type="primary">
+          <Button
+            icon={<CloudUploadOutlined />}
+            type="primary"
+            onClick={() => {
+              setOpenModalImport(true);
+            }}
+          >
             Import
           </Button>
           <Button
@@ -178,6 +186,10 @@ const UserTable = () => {
       <UserModalCreate
         openModalCreate={openModalCreate}
         setOpenModalCreate={setOpenModalCreate}
+      />
+      <UserImport
+        openModalImport={openModalImport}
+        setOpenModalImport={setOpenModalImport}
       />
     </>
   );

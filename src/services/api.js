@@ -40,3 +40,7 @@ export const callCreateAUser = (userData) => {
 export const callBulkCreateUser = (userData) => {
   return axios.post(`/api/v1/user/bulk-create`, userData);
 };
+
+export const callFetchListBook = (bookData) => {
+  return axios.post("/api/v1/book", bookData);
+};

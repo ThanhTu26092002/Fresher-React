@@ -4,9 +4,9 @@ import { callUpdateUser } from "../../../services/api";
 
 const UserModalUpdate = (props) => {
   const { openModelUpdate, setOpenModalUpdate } = props;
+  const [dataUpdate, setDataUpdate] = useState(null);
 
   const [isSubmit, setIsSubmit] = useState(false);
-  const [dataUpdate, setDataUpdate] = useState("");
 
   const [form] = Form.useForm();
 

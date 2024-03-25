@@ -18,7 +18,6 @@ import UserModalCreate from "./UserModalCreate";
 import * as XLSX from "xlsx";
 import {
   CloudUploadOutlined,
-  DeleteOutlined,
   DeleteTwoTone,
   EditTwoTone,
   ExportOutlined,
@@ -31,6 +30,7 @@ const UserTable = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState(0);
+  const [dataUpdate, setDataUpdate] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState("");
@@ -195,7 +195,7 @@ const UserTable = () => {
               setSortQuery("");
             }}
           >
-            <ReloadOutlined />
+            <ReloadOutlined /> edit
           </Button>
         </span>
       </div>
@@ -247,8 +247,6 @@ const UserTable = () => {
       <UserModalUpdate
         openModalUpdate={openModalUpdate}
         setOpenModalUpdate={setOpenModalUpdate}
-        // dataUpdate={dataUpdate}
-        // setDataUpdate={setDataUpdate}
       />
     </>
   );
